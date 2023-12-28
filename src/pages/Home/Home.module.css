@@ -1,0 +1,11 @@
+.content {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.darkMode {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}

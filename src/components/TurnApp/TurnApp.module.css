@@ -1,0 +1,79 @@
+.darken {
+  background-color: rgba(0, 0, 0, 0.5);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75); /* Adjust the color as needed */
+  }
+}
+
+.buttonContainer {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 100%;
+    transform: translate(-50%, 50%);
+  }
+
+  :nth-child(1) {
+    --nth-child: 1;
+  }
+  :nth-child(2) {
+    --nth-child: 2;
+  }
+  :nth-child(3) {
+    --nth-child: 3;
+  }
+  :nth-child(4) {
+    --nth-child: 4;
+  }
+  button {
+    left: 45%;
+    top: 45%;
+    border: none;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 85px;
+    background-color: black;
+    border-radius: 100%;
+    transform: translate(-50%, -50%) rotate(calc(var(--nth-child) * 90deg))
+      translate(0, -100%) rotate(calc(var(--nth-child) * -90deg));
+  }
+
+  button:focus {
+    outline: none;
+  }
+
+  /* Style each button by color */
+  .entry {
+    background-color: #8bde6e;
+  }
+
+  .break {
+    background-color: #ff5656;
+  }
+
+  .apex {
+    background-color: #fa881e;
+  }
+
+  .exit {
+    background-color: #59ebff;
+  }
+}

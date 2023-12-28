@@ -1,0 +1,32 @@
+.setting {
+  display: flex;
+  align-items: center;
+  margin-right: 60px;
+}
+
+.settingName {
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.settingUnit {
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.input input {
+  font-weight: bold;
+  text-align: center;
+  color: #ddfa67;
+}
+
+.selector {
+  margin-right: 60px;
+}
+
+.selectorName {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
