@@ -1,7 +1,10 @@
+.wrapper {
+  position: relative;
+}
+
 .setting {
   display: flex;
   align-items: center;
-  margin-right: 60px;
 }
 
 .settingName {
@@ -12,6 +15,7 @@
 
 .settingUnit {
   margin-left: 10px;
+  margin-right: 10px;
   font-size: 12px;
 }
 
@@ -29,4 +33,10 @@
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 10px;
+}
+
+.saveButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

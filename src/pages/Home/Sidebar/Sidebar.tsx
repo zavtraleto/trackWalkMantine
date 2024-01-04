@@ -13,8 +13,8 @@ import { Link } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 
 const data = [
-  { link: "", label: "Overview", icon: <OverviewIcon /> },
-  { link: "", label: "Circuits", icon: <TrackIcon /> },
+  { link: "/trackWalk", label: "Overview", icon: <OverviewIcon /> },
+  { link: "/circuits", label: "Circuits", icon: <TrackIcon /> },
   { link: "", label: "Calendar", icon: <CalendarIcon /> },
   { link: "", label: "Library", icon: <FolderIcon /> },
   { link: "", label: "Settings", icon: <SettingsIcon /> },
@@ -29,19 +29,18 @@ const Sidebar: FC<SidebarProps> = ({ minimal, handlers }) => {
   const [active, setActive] = useState("Overview");
 
   const links = data.map((item) => (
-    <a
+    <Link
       className={styles.link}
       data-active={item.label === active || undefined}
-      href={item.link}
+      to={item.link}
       key={item.label}
       onClick={(event) => {
-        event.preventDefault();
         setActive(item.label);
       }}
     >
       <span className={styles.linkIcon}>{item.icon}</span>
       {!minimal && <span className={styles.linkLabel}>{item.label}</span>}
-    </a>
+    </Link>
   ));
 
   return (

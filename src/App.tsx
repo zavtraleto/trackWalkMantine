@@ -7,20 +7,22 @@ import { Home } from "./pages/Home/Home";
 import { Register } from "./pages/Register/Register";
 import "./App.css";
 import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
+import { TrackWalk } from "./pages/Home/TrackWalk/TrackWalk";
+import { CircuitSelector } from "./pages/Home/CircuitSelector/CircuitSelector";
 
 export default function App() {
   return (
     <MantineProvider defaultColorScheme="dark" theme={theme}>
       <Router>
         <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="/trackWalk" element={<TrackWalk />} />
+            <Route path="/circuits" element={<CircuitSelector />} />
+          </Route>
           <Route path="/login" element={<Auth />} />
-          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       </Router>
-      <Box style={{ position: "absolute", right: "20px", bottom: "20px" }}>
-        <ThemeToggle />
-      </Box>
     </MantineProvider>
   );
 }
