@@ -22,7 +22,7 @@
 .input input {
   font-weight: bold;
   text-align: center;
-  color: #ddfa67;
+  color: var(--mantine-color-raceLime-text);
 }
 
 .selector {

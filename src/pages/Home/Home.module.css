@@ -3,6 +3,13 @@
   width: 100%;
   flex-direction: column;
   height: 100vh;
+  background: rgb(15, 15, 15);
+  background: linear-gradient(
+    349deg,
+    rgba(15, 15, 15, 1) 30%,
+    rgba(60, 60, 60, 1) 90%,
+    rgba(70, 70, 70, 1) 100%
+  );
 }
 
 .darkMode {

@@ -66,12 +66,7 @@ export const Register: FC = () => {
                 Register
               </Title>
             </Box>
-            <FileInput
-              mb="md"
-              clearable
-              label="Upload files"
-              placeholder="Upload files"
-            />
+            <FileInput mb="md" clearable label="Upload files" />
             <TextInput
               mb="md"
               label="Name"

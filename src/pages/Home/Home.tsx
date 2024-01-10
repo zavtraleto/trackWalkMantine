@@ -20,15 +20,6 @@ export const Home: FC = () => {
     >
       <AppShell.Navbar p={minimal ? "xs" : "md"}>
         <Sidebar minimal={minimal} handlers={handlers} />
-        <Box
-          style={{
-            position: "absolute",
-            right: "20px",
-            bottom: "20px",
-          }}
-        >
-          <ThemeToggle />
-        </Box>
       </AppShell.Navbar>
       <AppShell.Main className={styles.content}>
         <Outlet />

@@ -1,11 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 import cn from "classnames";
 import styles from "./TurnApp.module.css";
+import { useResizeObserver } from "@mantine/hooks";
 
 export const TurnApp = ({ src }) => {
   const canvasRef = useRef(null);
-  const containerRef = useRef(null);
+  // const containerRef = useRef(null);
   const imageRef = useRef(new Image()); // Ref for the image
+  const [containerRef, rect] = useResizeObserver();
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -63,14 +65,13 @@ export const TurnApp = ({ src }) => {
     };
   }, [src]);
 
-  useEffect(() => {
-    adjustCanvasSize();
-    window.addEventListener("resize", adjustCanvasSize);
-
-    return () => {
-      window.removeEventListener("resize", adjustCanvasSize);
-    };
-  }, []);
+  // useEffect(() => {
+  //   adjustCanvasSize();
+  //   window.addEventListener("resize", adjustCanvasSize);
+  //   return () => {
+  //     window.removeEventListener("resize", adjustCanvasSize);
+  //   };
+  // }, []);
 
   const handleColorSelect = (color) => {
     setShowPicker(false); // Hide picker
@@ -186,10 +187,10 @@ export const TurnApp = ({ src }) => {
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", height: "100%", position: "relative" }}
+      style={{ width: "100%", position: "relative" }}
       className={cn(styles.container, { [styles.darken]: showPicker })}
     >
-      <canvas ref={canvasRef} />
+      <canvas ref={canvasRef} height={rect.height - 100} width={rect.width} />
       {showPicker && (
         <div
           style={{

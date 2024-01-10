@@ -2,7 +2,11 @@ import {
   useMantineColorScheme,
   useComputedColorScheme,
   Switch,
+  ActionIcon,
+  Group,
 } from "@mantine/core";
+import IconSun from "@assets/icons/sun.svg?react";
+import IconMoon from "@assets/icons/moon.svg?react";
 import { FC } from "react";
 
 export const ThemeToggle: FC = () => {
@@ -12,14 +16,20 @@ export const ThemeToggle: FC = () => {
   });
 
   return (
-    <Switch
-      checked={computedColorScheme === "dark"}
-      onChange={() =>
+    <ActionIcon
+      onClick={() =>
         setColorScheme(computedColorScheme === "light" ? "dark" : "light")
       }
+      variant="default"
+      size="lg"
       aria-label="Toggle color scheme"
-      size="sm"
-      color="raceLime"
-    />
+      p={5}
+    >
+      {computedColorScheme === "light" ? (
+        <IconMoon fill="black" />
+      ) : (
+        <IconSun fill="white" />
+      )}
+    </ActionIcon>
   );
 };

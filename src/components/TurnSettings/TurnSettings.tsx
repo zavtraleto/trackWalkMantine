@@ -108,7 +108,7 @@ export const TurnSettings: FC<TurnSettingsProps> = ({
         <Text className={styles.selectorName}>Apex</Text>
         <SegmentedControl
           className={styles.selectorControl}
-          color="lime"
+          color="raceLime"
           data={["Early", "Normal", "Later"]}
           size="lg"
           onChange={(value) => handleSettingChange("apex", value)}
@@ -119,7 +119,7 @@ export const TurnSettings: FC<TurnSettingsProps> = ({
         <Text className={styles.selectorName}>Asphalt Grip Rate</Text>
         <SegmentedControl
           className={styles.selectorControl}
-          color="lime"
+          color="raceLime"
           data={["1", "2", "3", "4", "5"]}
           size="lg"
           onChange={(value) => handleSettingChange("asphaltGripRate", value)}
@@ -130,7 +130,7 @@ export const TurnSettings: FC<TurnSettingsProps> = ({
         <Text className={styles.selectorName}>Strategy</Text>
         <SegmentedControl
           className={styles.selectorControl}
-          color="lime"
+          color="raceLime"
           data={["Overtaking", "Defensive"]}
           size="lg"
           onChange={(value) => handleSettingChange("strategy", value)}
@@ -139,7 +139,6 @@ export const TurnSettings: FC<TurnSettingsProps> = ({
       </Box>
       <Button
         variant="outline"
-        color="raceLime"
         size="xs"
         className={styles.saveButton}
         onClick={saveSettings}

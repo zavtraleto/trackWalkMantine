@@ -72,21 +72,13 @@ export const Auth: FC = () => {
               size="lg"
               {...form.getInputProps("password")}
             />
-            <Button
-              radius="xl"
-              color="raceLime"
-              fullWidth
-              mt="xl"
-              size="lg"
-              type="submit"
-            >
+            <Button radius="xl" fullWidth mt="xl" size="lg" type="submit">
               Sign in
             </Button>
 
             <Text ta="center" mt="md">
               Don&apos;t have an account?{" "}
               <Anchor
-                c="raceLime"
                 fw={700}
                 underline="hover"
                 onClick={(event) => {

@@ -1,5 +1,12 @@
 import { FC, useState } from "react";
-import { Box, Group } from "@mantine/core";
+import {
+  Anchor,
+  Box,
+  Flex,
+  Group,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
 import styles from "./Sidebar.module.css";
 import OverviewIcon from "@assets/icons/overview.svg?react";
 import TrackIcon from "@assets/icons/track.svg?react";
@@ -8,25 +15,34 @@ import FolderIcon from "@assets/icons/folder.svg?react";
 import SettingsIcon from "@assets/icons/settings.svg?react";
 import LogoutIcon from "@assets/icons/logout.svg?react";
 import Logo from "@assets/icons/logo.svg?react";
-import { ThemeToggle } from "@components/ThemeToggle/ThemeToggle";
 import { Link } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
+import { ThemeToggle } from "../../../components/ThemeToggle/ThemeToggle";
 
 const data = [
-  { link: "/trackWalk", label: "Overview", icon: <OverviewIcon /> },
-  { link: "/circuits", label: "Circuits", icon: <TrackIcon /> },
-  { link: "", label: "Calendar", icon: <CalendarIcon /> },
-  { link: "", label: "Library", icon: <FolderIcon /> },
-  { link: "", label: "Settings", icon: <SettingsIcon /> },
+  {
+    link: "/trackWalk",
+    label: "Overview",
+    icon: <OverviewIcon stroke="gray" fill="none" />,
+  },
+  { link: "/circuits", label: "Circuits", icon: <TrackIcon stroke="gray" /> },
+  { link: "", label: "Calendar", icon: <CalendarIcon fill="gray" /> },
+  { link: "", label: "Library", icon: <FolderIcon fill="gray" /> },
+  { link: "", label: "Settings", icon: <SettingsIcon stroke="gray" /> },
 ];
 
 type SidebarProps = {
   minimal?: boolean;
-  handlers: ReturnType<typeof useDisclosure>;
+  handlers: {
+    open: () => void;
+    close: () => void;
+    toggle: () => void;
+  };
 };
 
 const Sidebar: FC<SidebarProps> = ({ minimal, handlers }) => {
   const [active, setActive] = useState("Overview");
+  const { colorScheme } = useMantineColorScheme();
 
   const links = data.map((item) => (
     <Link
@@ -38,32 +54,40 @@ const Sidebar: FC<SidebarProps> = ({ minimal, handlers }) => {
         setActive(item.label);
       }}
     >
-      <span className={styles.linkIcon}>{item.icon}</span>
-      {!minimal && <span className={styles.linkLabel}>{item.label}</span>}
+      <Flex m="sm">{item.icon}</Flex>
+      {!minimal && (
+        <Text pt="md" pb="md">
+          {item.label}
+        </Text>
+      )}
     </Link>
   ));
 
   return (
     <nav className={styles.navbar}>
-      <Box
-        className={styles.logo}
-        mt="md"
-        mb="md"
-        onClick={() => handlers.toggle()}
-      >
-        <Logo />
+      <Box className={styles.logo} mt="md" mb="md" onClick={handlers.toggle}>
+        <Logo
+          fill={colorScheme === "dark" ? "white" : "black"}
+          stroke={colorScheme === "dark" ? "white" : "black"}
+        />
       </Box>
       <div className={styles.navbarMain}>
-        <Group className={styles.header} justify="space-between"></Group>
         {links}
-      </div>
-
-      <div className={styles.footer}>
         <Link to="/login" className={styles.link}>
-          <LogoutIcon />
-          {!minimal && <Box ml="md">Logout</Box>}
+          <Flex m="sm">
+            <LogoutIcon stroke="gray" />
+          </Flex>
+          {!minimal && (
+            <Text pt="md" pb="md">
+              Logout
+            </Text>
+          )}
         </Link>
       </div>
+
+      <Flex className={styles.footer} justify="center">
+        <ThemeToggle />
+      </Flex>
     </nav>
   );
 };

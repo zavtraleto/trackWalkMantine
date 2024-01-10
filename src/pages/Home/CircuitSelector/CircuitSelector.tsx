@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
   TextInput,
+  Title,
 } from "@mantine/core";
 import Estoril from "@assets/img/circuits/estoril.svg?react";
 import Monza from "@assets/img/circuits/monza.svg?react";
@@ -34,9 +35,7 @@ export const CircuitSelector: FC = () => {
     <Stack h="100%" justify="flex-start" gap="md">
       <Paper style={{ width: "100%" }} p="md">
         <Flex justify="space-between" align="center">
-          <Text size="xl" fw={800}>
-            Circuits
-          </Text>
+          <Title order={2}>Circuits</Title>
           <TextInput
             value={searchValue}
             onChange={(event) => setSearchValue(event.currentTarget.value)}
@@ -57,7 +56,7 @@ export const CircuitSelector: FC = () => {
                 >
                   {track.img}
                 </Card.Section>
-                <Button color="raceLime" variant="outline" fw={500}>
+                <Button variant="outline" fw={500}>
                   {track.name}
                 </Button>
               </Card>
