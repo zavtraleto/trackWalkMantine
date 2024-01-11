@@ -1,9 +1,11 @@
 .container {
-  min-height: 60vh;
+  /* min-height: 60vh; */
+  overflow: hidden;
 }
 
 .darken {
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
 
   &::after {
     content: "";
@@ -16,7 +18,7 @@
   }
 }
 
-.buttonContainer {
+.point {
   position: relative;
 
   &::after {
@@ -30,6 +32,14 @@
     border-radius: 100%;
     transform: translate(-50%, 50%);
   }
+}
+
+.buttonContainer {
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
 
   :nth-child(1) {
     --nth-child: 1;
@@ -47,17 +57,13 @@
     left: 45%;
     top: 45%;
     border: none;
-    position: absolute;
+    /* position: absolute; */
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 85px;
-    height: 85px;
-    background-color: black;
-    border-radius: 100%;
-    transform: translate(-50%, -50%) rotate(calc(var(--nth-child) * 90deg))
-      translate(0, -100%) rotate(calc(var(--nth-child) * -90deg));
+    height: 45px;
   }
 
   button:focus {
@@ -69,7 +75,7 @@
     background-color: #8bde6e;
   }
 
-  .break {
+  .brake {
     background-color: #ff5656;
   }
 
@@ -79,5 +85,11 @@
 
   .exit {
     background-color: #59ebff;
+    color: var(--mantine-color-dark-4);
+  }
+
+  .note {
+    background-color: #f2f2f2;
+    color: var(--mantine-color-dark-4);
   }
 }

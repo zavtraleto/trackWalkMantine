@@ -20,8 +20,8 @@ export const CircutLayout: FC<CircutLayoutProps> = ({
   return (
     <Box p="xl" className={styles.trackMap}>
       <svg
-        width="979"
-        height="388"
+        width="100%"
+        height="100%"
         viewBox="0 0 979 388"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

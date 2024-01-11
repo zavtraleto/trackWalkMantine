@@ -38,7 +38,7 @@ export const Auth: FC = () => {
   });
 
   return (
-    <Center style={{ height: "100vh" }}>
+    <Center style={{ height: "100vh" }} className={styles.container}>
       <form onSubmit={form.onSubmit((data) => signIn(data))}>
         <Container size={520} my={40} miw={450}>
           <Paper withBorder shadow="md" p={50} mt={50} radius="md">

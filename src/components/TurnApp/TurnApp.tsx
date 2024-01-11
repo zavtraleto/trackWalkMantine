@@ -1,38 +1,60 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, FC, useCallback } from "react";
 import cn from "classnames";
 import styles from "./TurnApp.module.css";
 import { useResizeObserver } from "@mantine/hooks";
+import BrakeIcon from "@assets/icons/pins/red_pin.svg?react";
+import ApexIcon from "@assets/icons/pins/orange_pin.svg?react";
+import ExitIcon from "@assets/icons/pins/blue_pin.svg?react";
+import EntryIcon from "@assets/icons/pins/green_pin.svg?react";
+import NoteIcon from "@assets/icons/pins/white_pin.svg?react";
+import { Box } from "@mantine/core";
 
-export const TurnApp = ({ src }) => {
-  const canvasRef = useRef(null);
-  // const containerRef = useRef(null);
-  const imageRef = useRef(new Image()); // Ref for the image
+type TurnAppProps = {
+  src: string;
+  turnNumber: number;
+  turnPinpoints: Record<string, any>;
+  setTurnPinpoints: (pinpoints: Record<string, any>) => void;
+};
+
+const iconMap = {
+  brake: BrakeIcon,
+  apex: ApexIcon,
+  exit: ExitIcon,
+  entry: EntryIcon,
+  note: NoteIcon,
+};
+
+export const TurnApp: FC<TurnAppProps> = ({
+  src,
+  turnNumber,
+  turnPinpoints,
+  setTurnPinpoints,
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef(new Image());
   const [containerRef, rect] = useResizeObserver();
-
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [markers, setMarkers] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
-
   const [showPicker, setShowPicker] = useState(false);
   const [pickerPosition, setPickerPosition] = useState({ x: 0, y: 0 });
   const [selectedColor, setSelectedColor] = useState("red");
 
-  const adjustCanvasSize = () => {
+  const adjustCanvasSize = useCallback(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
-
     if (canvas && container) {
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
     }
-  };
+  }, [containerRef]);
 
-  const drawImageAndMarkers = () => {
+  const drawImageAndMarkers = useCallback(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const context = canvas.getContext("2d");
+    if (!context) return;
 
-    // Clear canvas and draw image
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(
       imageRef.current,
@@ -42,155 +64,133 @@ export const TurnApp = ({ src }) => {
       imageRef.current.height * zoom
     );
 
-    // Draw markers
-    markers.forEach((marker) => {
-      context.fillStyle = marker.color; // Use the color from the marker object
-      context.beginPath();
-      context.arc(
-        marker.x * zoom + position.x,
-        marker.y * zoom + position.y,
-        5,
-        0,
-        2 * Math.PI
-      );
-      context.fill();
-    });
-  };
-
-  useEffect(() => {
-    // Load the image once
-    imageRef.current.src = src;
-    imageRef.current.onload = () => {
-      drawImageAndMarkers(); // Draw image and markers when image loads
-    };
-  }, [src]);
-
-  // useEffect(() => {
-  //   adjustCanvasSize();
-  //   window.addEventListener("resize", adjustCanvasSize);
-  //   return () => {
-  //     window.removeEventListener("resize", adjustCanvasSize);
-  //   };
-  // }, []);
-
-  const handleColorSelect = (color) => {
-    setShowPicker(false); // Hide picker
-    setSelectedColor(color); // Set selected color
-    // Add marker with selected color
-    setMarkers([
-      ...markers,
-      { x: pickerPosition.x, y: pickerPosition.y, color },
-    ]);
-    drawImageAndMarkers();
-  };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    const image = new Image();
-    image.src = src;
-
-    const drawImage = () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(
-        image,
-        position.x,
-        position.y,
-        image.width * zoom,
-        image.height * zoom
-      );
-
-      markers.forEach((marker) => {
-        // Use the color from the marker object
-        context.fillStyle = marker.color;
-        context.beginPath();
-        context.arc(
+    turnPinpoints[turnNumber]?.forEach((marker) => {
+      const img = new Image();
+      img.onload = () => {
+        context.drawImage(
+          img,
           marker.x * zoom + position.x,
           marker.y * zoom + position.y,
-          5,
-          0,
-          2 * Math.PI
+          30,
+          30
         );
-        context.fill();
-      });
+      };
+      img.src = marker.icon;
+    });
+  }, [position, zoom, turnPinpoints, turnNumber]);
+
+  useEffect(() => {
+    imageRef.current.src = src;
+    imageRef.current.onload = drawImageAndMarkers;
+    window.addEventListener("resize", adjustCanvasSize);
+    return () => {
+      window.removeEventListener("resize", adjustCanvasSize);
     };
+  }, [src, adjustCanvasSize, drawImageAndMarkers]);
 
-    image.onload = drawImage;
+  const handleTypeSelect = useCallback(
+    (type) => {
+      const icon = iconMap[type];
+      setShowPicker(false);
+      setTurnPinpoints((pinpoints) => ({
+        [turnNumber]: [
+          ...(pinpoints[turnNumber] || []),
+          { x: pickerPosition.x, y: pickerPosition.y, icon, type },
+        ],
+      }));
+      drawImageAndMarkers();
+    },
+    [pickerPosition, drawImageAndMarkers, turnNumber]
+  );
 
-    const handleWheel = (e) => {
+  const handleWheel = useCallback(
+    (e) => {
       e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
+      const rect = canvasRef.current.getBoundingClientRect();
       const mouseX = (e.clientX - rect.left - position.x) / zoom;
       const mouseY = (e.clientY - rect.top - position.y) / zoom;
       const zoomFactor = 0.1;
       const newZoom = e.deltaY > 0 ? zoom - zoomFactor : zoom + zoomFactor;
-      const boundedZoom = Math.max(1, newZoom);
+      const boundedZoom = Math.max(1, Math.min(5, newZoom));
 
-      const newPosition = {
-        x: position.x - mouseX * (boundedZoom - zoom),
-        y: position.y - mouseY * (boundedZoom - zoom),
-      };
-
-      setPosition(newPosition);
+      setPosition((prevPosition) => ({
+        x: prevPosition.x - mouseX * (boundedZoom - zoom),
+        y: prevPosition.y - mouseY * (boundedZoom - zoom),
+      }));
       setZoom(boundedZoom);
-      drawImageAndMarkers();
-    };
-    const handleMouseMove = (e) => {
-      if (e.buttons === 1) {
-        setPosition({
-          x: position.x + e.movementX,
-          y: position.y + e.movementY,
-        });
-        setIsDragging(true);
-        drawImage();
-      }
-      drawImageAndMarkers();
-    };
+    },
+    [zoom, position]
+  );
 
-    const handleMouseUp = () => {
-      setTimeout(() => setIsDragging(false), 0);
-    };
+  const handleMouseMove = useCallback((e) => {
+    if (e.buttons === 1) {
+      setPosition((prevPosition) => ({
+        x: prevPosition.x + e.movementX,
+        y: prevPosition.y + e.movementY,
+      }));
+      setIsDragging(true);
+    }
+  }, []);
 
-    const handleCanvasClick = (e) => {
+  const handleMouseUp = useCallback(() => {
+    setTimeout(() => setIsDragging(false), 0);
+  }, []);
+
+  const handleCanvasClick = useCallback(
+    (e) => {
       if (!isDragging) {
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left - position.x) / zoom;
-        const y = (e.clientY - rect.top - position.y) / zoom;
-
-        // Set position for color picker
         setPickerPosition({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
+          x: (e.clientX - rect.left - position.x) / zoom,
+          y: (e.clientY - rect.top - position.y) / zoom,
         });
         setShowPicker(true);
-
-        // Comment out adding marker immediately
-        // setMarkers([...markers, { x, y }]);
-        // drawImageAndMarkers();
       }
-    };
+    },
+    [isDragging, position, zoom]
+  );
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
     canvas.addEventListener("wheel", handleWheel);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseup", handleMouseUp);
     canvas.addEventListener("click", handleCanvasClick);
 
-    drawImageAndMarkers();
-
     return () => {
       canvas.removeEventListener("wheel", handleWheel);
       canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("click", handleCanvasClick);
     };
-  }, [src, position, zoom, markers]);
+  }, [handleWheel, handleMouseMove, handleMouseUp, handleCanvasClick]);
 
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", position: "relative" }}
+      style={{ width: "100%", position: "relative", height: "100%" }}
       className={cn(styles.container, { [styles.darken]: showPicker })}
     >
-      <canvas ref={canvasRef} height={rect.height - 100} width={rect.width} />
+      <canvas ref={canvasRef} height={rect.height - 10} width={rect.width} />
+      {turnPinpoints[turnNumber]?.map((marker, index) => {
+        const IconComponent = iconMap[marker.type];
+        return (
+          <IconComponent
+            key={index}
+            style={{
+              position: "absolute",
+              left: marker.x * zoom + position.x,
+              top: marker.y * zoom + position.y,
+              transform: "translate(-50%, -50%)", // Center the icon on the coordinates
+              width: 40,
+              height: 70,
+            }}
+          />
+        );
+      })}
+
       {showPicker && (
         <div
           style={{
@@ -200,33 +200,42 @@ export const TurnApp = ({ src }) => {
             zIndex: 10,
           }}
         >
-          <div className={styles.buttonContainer}>
-            <button
-              className={styles.break}
-              onClick={() => handleColorSelect("#ff5656")}
-            >
-              Break
-            </button>
-            <button
-              className={styles.apex}
-              onClick={() => handleColorSelect("#fa881e")}
-            >
-              Apex
-            </button>
-            <button
-              className={styles.exit}
-              onClick={() => handleColorSelect("#59ebff")}
-            >
-              Exit
-            </button>
-            <button
-              className={styles.entry}
-              onClick={() => handleColorSelect("#8bde6e")}
-            >
-              Entry
-            </button>
-          </div>
+          <div className={styles.point}></div>
         </div>
+      )}
+      {showPicker && (
+        <Box className={styles.buttonContainer}>
+          <button
+            className={styles.brake}
+            onClick={() => handleTypeSelect("brake")}
+          >
+            Brake
+          </button>
+          <button
+            className={styles.apex}
+            onClick={() => handleTypeSelect("apex")}
+          >
+            Apex
+          </button>
+          <button
+            className={styles.exit}
+            onClick={() => handleTypeSelect("exit")}
+          >
+            Exit
+          </button>
+          <button
+            className={styles.entry}
+            onClick={() => handleTypeSelect("entry")}
+          >
+            Entry
+          </button>
+          <button
+            className={styles.note}
+            onClick={() => handleTypeSelect("note")}
+          >
+            Note
+          </button>
+        </Box>
       )}
     </div>
   );

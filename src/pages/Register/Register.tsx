@@ -48,7 +48,7 @@ export const Register: FC = () => {
   });
 
   return (
-    <Center style={{ height: "100vh" }}>
+    <Center style={{ height: "100vh" }} className={styles.container}>
       <form onSubmit={form.onSubmit((data) => signUp(data))}>
         <Container size={520} my={40} miw={450}>
           <Paper withBorder shadow="md" p={50} mt={50} radius="md">
@@ -97,7 +97,7 @@ export const Register: FC = () => {
             />
             <Button
               radius="xl"
-              color="lime"
+              color="raceLime"
               fullWidth
               mt="xl"
               size="lg"
@@ -108,7 +108,7 @@ export const Register: FC = () => {
             <Text ta="center" mt="md">
               Don&apos;t have an account?{" "}
               <Anchor
-                c="lime"
+                c="raceLime"
                 fw={700}
                 underline="hover"
                 onClick={(event) => {

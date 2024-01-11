@@ -1,5 +1,6 @@
-import { FC, useState } from "react";
-import curva from "@assets/img/curva.png";
+import { FC, useCallback, useMemo, useState } from "react";
+import curva1 from "@assets/img/curva.png";
+import curva2 from "@assets/img/curva_2.png";
 import {
   Button,
   Flex,
@@ -16,6 +17,7 @@ import styles from "./TrackWalk.module.css";
 import { CircutLayout } from "../../../components/CircuitLayout/CircuitLayout";
 import { TurnApp } from "../../../components/TurnApp/TurnApp";
 import { TurnSettings } from "../../../components/TurnSettings/TurnSettings";
+import { TurnPinpoints } from "../../../components/TurnPinpoints/TurnPinpoints";
 
 type CircutState = "overall" | "pinpoints" | "notes";
 
@@ -23,10 +25,25 @@ export const TrackWalk: FC = () => {
   const [controlState, setControlState] = useState<CircutState>("overall");
   const [turnNumber, setTurnNumber] = useState(1);
   const [turnSettings, setTurnSettings] = useState({});
+  const [turnPinpoints, setTurnPinpoints] = useState({});
+
   const NUM_OF_TURNS = 13;
-  const turnsAsArray = Array.from(Array(NUM_OF_TURNS).keys()).map(
-    (turn) => turn + 1
+  const turnsAsArray = useMemo(
+    () => Array.from({ length: NUM_OF_TURNS }, (_, i) => i + 1),
+    []
   );
+
+  const currentTurnImage = useCallback(
+    (turn) => {
+      if (turn == 1) {
+        return curva1;
+      } else if (turn == 2) {
+        return curva2;
+      } else return curva1;
+    },
+    [turnNumber]
+  );
+
   return (
     <Stack h="100%" justify="space-between" gap="md">
       <Paper style={{ width: "100%" }} p="md">
@@ -123,7 +140,14 @@ export const TrackWalk: FC = () => {
         {controlState === "overall" && (
           <CircutLayout setTurnNumber={setTurnNumber} turnNumber={turnNumber} />
         )}
-        {controlState === "pinpoints" && <TurnApp src={curva} />}
+        {controlState === "pinpoints" && (
+          <TurnApp
+            src={currentTurnImage(turnNumber)}
+            turnNumber={turnNumber}
+            turnPinpoints={turnPinpoints}
+            setTurnPinpoints={setTurnPinpoints}
+          />
+        )}
       </Paper>
       <Paper style={{ width: "100%" }} p="xl">
         {controlState === "overall" && (
@@ -131,6 +155,13 @@ export const TrackWalk: FC = () => {
             turnNumber={turnNumber}
             turnSettings={turnSettings}
             setTurnSettings={setTurnSettings}
+          />
+        )}
+        {controlState === "pinpoints" && (
+          <TurnPinpoints
+            turnNumber={turnNumber}
+            turnPinpoints={turnPinpoints}
+            setTurnPinpoints={setTurnPinpoints}
           />
         )}
       </Paper>
