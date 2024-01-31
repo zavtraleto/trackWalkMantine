@@ -18,6 +18,7 @@ export default defineConfig({
       svgrOptions: {
         // svgr options
       },
+      include: "**/*.svg?react",
     }),
   ],
 });

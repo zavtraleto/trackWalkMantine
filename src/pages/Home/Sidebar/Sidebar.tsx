@@ -16,7 +16,6 @@ import SettingsIcon from "@assets/icons/settings.svg?react";
 import LogoutIcon from "@assets/icons/logout.svg?react";
 import Logo from "@assets/icons/logo.svg?react";
 import { Link } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
 import { ThemeToggle } from "../../../components/ThemeToggle/ThemeToggle";
 
 const data = [
@@ -33,16 +32,17 @@ const data = [
 
 type SidebarProps = {
   minimal?: boolean;
-  handlers: {
+  handlers?: {
     open: () => void;
     close: () => void;
     toggle: () => void;
   };
+
+  sidebarToggle?: () => void;
 };
 
-const Sidebar: FC<SidebarProps> = ({ minimal, handlers }) => {
+const Sidebar: FC<SidebarProps> = ({ sidebarToggle }) => {
   const [active, setActive] = useState("Overview");
-  const { colorScheme } = useMantineColorScheme();
 
   const links = data.map((item) => (
     <Link
@@ -50,26 +50,22 @@ const Sidebar: FC<SidebarProps> = ({ minimal, handlers }) => {
       data-active={item.label === active || undefined}
       to={item.link}
       key={item.label}
-      onClick={(event) => {
+      onClick={(_) => {
         setActive(item.label);
+        sidebarToggle();
       }}
     >
       <Flex m="sm">{item.icon}</Flex>
-      {!minimal && (
-        <Text pt="md" pb="md">
-          {item.label}
-        </Text>
-      )}
+      <Text pt="md" pb="md">
+        {item.label}
+      </Text>
     </Link>
   ));
 
   return (
     <nav className={styles.navbar}>
-      <Box className={styles.logo} mt="md" mb="md" onClick={handlers.toggle}>
-        <Logo
-          fill={colorScheme === "dark" ? "white" : "black"}
-          stroke={colorScheme === "dark" ? "white" : "black"}
-        />
+      <Box className={styles.logo} mt="md" mb="md" visibleFrom="sm">
+        <Logo className="icon-stroke icon-fill" />
       </Box>
       <div className={styles.navbarMain}>
         {links}
@@ -77,11 +73,9 @@ const Sidebar: FC<SidebarProps> = ({ minimal, handlers }) => {
           <Flex m="sm">
             <LogoutIcon stroke="gray" />
           </Flex>
-          {!minimal && (
-            <Text pt="md" pb="md">
-              Logout
-            </Text>
-          )}
+          <Text pt="md" pb="md">
+            Logout
+          </Text>
         </Link>
       </div>
 

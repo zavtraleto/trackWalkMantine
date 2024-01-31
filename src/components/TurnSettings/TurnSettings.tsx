@@ -40,7 +40,7 @@ export const TurnSettings: FC<TurnSettingsProps> = ({
   return (
     <>
       <SimpleGrid
-        cols={3}
+        cols={{ base: 1, sm: 1, lg: 3 }}
         spacing="xl"
         verticalSpacing="xl"
         className={styles.wrapper}
@@ -158,11 +158,6 @@ export const TurnSettings: FC<TurnSettingsProps> = ({
           />
         </Box>
       </SimpleGrid>
-      <Box mt="xl">
-        <Button variant="outline" size="sm" onClick={saveSettings} fullWidth>
-          Save
-        </Button>
-      </Box>
     </>
   );
 };

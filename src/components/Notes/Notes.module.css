@@ -1,0 +1,7 @@
+/* .row {
+  overflow-x: auto;
+} */
+
+.icon {
+  stroke: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}

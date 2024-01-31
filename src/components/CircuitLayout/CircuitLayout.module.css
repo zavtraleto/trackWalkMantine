@@ -2,6 +2,11 @@
   background-image: url("@assets/img/estoril_sattelite.png");
   background-repeat: no-repeat;
   background-size: cover;
-  max-height: 480px;
-  /* TODO: fix height issues later */
+  height: 100%;
+  overflow-y: auto;
+}
+
+.trackVector {
+  display: block;
+  width: auto;
 }

@@ -6,6 +6,7 @@ import { Auth } from "./pages/Auth/Auth";
 import { Home } from "./pages/Home/Home";
 import { Register } from "./pages/Register/Register";
 import "./App.css";
+import "@mantine/carousel/styles.css";
 import { TrackWalk } from "./pages/Home/TrackWalk/TrackWalk";
 import { CircuitSelector } from "./pages/Home/CircuitSelector/CircuitSelector";
 

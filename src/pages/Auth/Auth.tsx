@@ -40,8 +40,8 @@ export const Auth: FC = () => {
   return (
     <Center style={{ height: "100vh" }} className={styles.container}>
       <form onSubmit={form.onSubmit((data) => signIn(data))}>
-        <Container size={520} my={40} miw={450}>
-          <Paper withBorder shadow="md" p={50} mt={50} radius="md">
+        <Container size={520} my={40} miw={320}>
+          <Paper withBorder shadow="md" p="xl" mt="xl" radius="md">
             <Box>
               <Title order={1} ta="center" tt="uppercase">
                 Get Started
@@ -61,7 +61,6 @@ export const Auth: FC = () => {
               placeholder="your@email.pt"
               required
               mb="md"
-              size="lg"
               {...form.getInputProps("email")}
             />
             <PasswordInput
@@ -69,10 +68,9 @@ export const Auth: FC = () => {
               placeholder="Your password"
               required
               mb="md"
-              size="lg"
               {...form.getInputProps("password")}
             />
-            <Button radius="xl" fullWidth mt="xl" size="lg" type="submit">
+            <Button radius="xl" fullWidth mt="xl" type="submit">
               Sign in
             </Button>
 

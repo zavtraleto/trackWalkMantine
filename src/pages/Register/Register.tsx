@@ -50,8 +50,8 @@ export const Register: FC = () => {
   return (
     <Center style={{ height: "100vh" }} className={styles.container}>
       <form onSubmit={form.onSubmit((data) => signUp(data))}>
-        <Container size={520} my={40} miw={450}>
-          <Paper withBorder shadow="md" p={50} mt={50} radius="md">
+        <Container size={520} my={40} miw={320}>
+          <Paper withBorder shadow="md" p="xl" radius="md">
             <Box>
               <Title order={1} ta="center" tt="uppercase">
                 Get Started
@@ -100,7 +100,6 @@ export const Register: FC = () => {
               color="raceLime"
               fullWidth
               mt="xl"
-              size="lg"
               type="submit"
             >
               Register

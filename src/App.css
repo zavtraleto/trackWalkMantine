@@ -15,3 +15,11 @@
   src: url("./Poppins-Light.ttf") format("truetype");
   font-weight: 300;
 }
+
+.icon-stroke {
+  stroke: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}
+
+.icon-fill {
+  fill: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}
