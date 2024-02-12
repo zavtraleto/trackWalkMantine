@@ -7,6 +7,7 @@ import curva1 from "@assets/img/curva_1_2.png";
 import curva2 from "@assets/img/curva_2.png";
 import ChevronUpIcon from "@assets/icons/chevron_up.svg?react";
 import { TurnPinpoints } from "../../components/TurnPinpoints/TurnPinpoints";
+import TurnAppKonva from "../../components/TurnApp/TurnAppKonva";
 
 type CircuitPinpointsProps = {
   turnNumber: number;
@@ -36,48 +37,28 @@ export const CircuitPinpoints: FC<CircuitPinpointsProps> = ({ turnNumber }) => {
         turnPinpoints={turnPinpoints}
         setTurnPinpoints={setTurnPinpoints}
       />
-      <Drawer
-        opened={opened}
-        onClose={close}
-        position="bottom"
-        withCloseButton={false}
-        size="75%"
-      >
-        <Tabs defaultValue="settings">
-          <Tabs.List>
-            <Tabs.Tab value="settings">Turn {turnNumber} Settings</Tabs.Tab>
-            <Tabs.Tab value="pinpoints">Pinpoints Notes</Tabs.Tab>
-          </Tabs.List>
 
-          <Tabs.Panel value="settings" pt="md" pb="md">
-            <ScrollArea>
-              <TurnSettings
-                turnNumber={turnNumber}
-                turnSettings={turnSettings}
-                setTurnSettings={setTurnSettings}
-              />
-            </ScrollArea>
-          </Tabs.Panel>
-          <Tabs.Panel value="pinpoints" pt="md" pb="md">
-            <TurnPinpoints
-              turnNumber={turnNumber}
-              turnPinpoints={turnPinpoints}
-              setTurnPinpoints={setTurnPinpoints}
-            />
-          </Tabs.Panel>
-        </Tabs>
-      </Drawer>
+      <Tabs defaultValue="settings">
+        <Tabs.List>
+          <Tabs.Tab value="settings">Turn {turnNumber} Settings</Tabs.Tab>
+          <Tabs.Tab value="pinpoints">Turn Notes</Tabs.Tab>
+        </Tabs.List>
 
-      <Button
-        variant="transparent"
-        size="xl"
-        rightSection={
-          <ChevronUpIcon className="icon-stroke" height="24px" width="24px" />
-        }
-        onClick={open}
-      >
-        Turn Settings
-      </Button>
+        <Tabs.Panel value="settings" pt="md" pb="md">
+          <TurnSettings
+            turnNumber={turnNumber}
+            turnSettings={turnSettings}
+            setTurnSettings={setTurnSettings}
+          />
+        </Tabs.Panel>
+        <Tabs.Panel value="pinpoints" pt="md" pb="md">
+          <TurnPinpoints
+            turnNumber={turnNumber}
+            turnPinpoints={turnPinpoints}
+            setTurnPinpoints={setTurnPinpoints}
+          />
+        </Tabs.Panel>
+      </Tabs>
     </Stack>
   );
 };

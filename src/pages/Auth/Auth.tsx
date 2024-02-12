@@ -14,16 +14,12 @@ import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
+import { addChamp, getUserByEmail } from "../../service/api";
+import { useMutation, useQuery } from "react-query";
+import { notifications } from "@mantine/notifications";
 
 export const Auth: FC = () => {
   const navigate = useNavigate();
-
-  const signIn = (data) => {
-    const { email, password } = data;
-    if (typeof email === "string" && typeof password === "string") {
-      navigate("/");
-    }
-  };
 
   const form = useForm({
     initialValues: {
@@ -36,6 +32,33 @@ export const Auth: FC = () => {
       password: isNotEmpty("Enter your password"),
     },
   });
+
+  const { data: userFromServerData, refetch } = useQuery(
+    "getUserByEmail",
+    () => getUserByEmail(form.values.email),
+    {
+      enabled: false,
+      onSuccess: () => {},
+      onError: () => {
+        notifications.show({
+          title: "Authentication error",
+          message: "User not found",
+          color: "red",
+        });
+      },
+    }
+  );
+
+  const signIn = (data) => {
+    const { email, password } = data;
+    refetch();
+    // if (typeof email === "string" && typeof password === "string") {
+    //   if (userFromServerData.password === password) {
+    //     localStorage.setItem("user", JSON.stringify({ isAuthenticated: true }));
+    //     navigate("/");
+    //   }
+    // }
+  };
 
   return (
     <Center style={{ height: "100vh" }} className={styles.container}>

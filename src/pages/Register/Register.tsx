@@ -15,35 +15,42 @@ import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
+import { useMutation } from "react-query";
+import { signUpUser } from "../../service/api";
+import { notifications } from "@mantine/notifications";
 
 export const Register: FC = () => {
   const navigate = useNavigate();
 
-  const signUp = (data) => {
-    const { name, email, nationality, residenceCity } = data;
-    if (
-      typeof name === "string" &&
-      typeof email === "string" &&
-      typeof nationality === "string" &&
-      typeof residenceCity === "string"
-    ) {
+  const { mutate: signUpHandler } = useMutation(signUpUser, {
+    onSuccess: (data) => {
       navigate("/");
+      localStorage.setItem("user", JSON.stringify({ isAuthenticated: true }));
+      notifications.show({
+        title: "User created",
+        message: "User created successfully",
+        color: "green",
+      });
+    },
+    onError: (error) => {},
+  });
+
+  const signUp = (data) => {
+    const { email, password } = data;
+    if (typeof password === "string" && typeof email === "string") {
+      signUpHandler(data);
     }
   };
 
   const form = useForm({
     initialValues: {
-      name: "",
       email: "",
-      nationality: "",
-      residenceCity: "",
+      password: "",
     },
 
     validate: {
-      name: isNotEmpty("Enter your name"),
       email: isEmail("Invalid email"),
-      nationality: isNotEmpty("Select your nationality"),
-      residenceCity: isNotEmpty("Select your residence city"),
+      password: isNotEmpty("Enter your password"),
     },
   });
 
@@ -66,14 +73,7 @@ export const Register: FC = () => {
                 Register
               </Title>
             </Box>
-            <FileInput mb="md" clearable label="Upload files" />
-            <TextInput
-              mb="md"
-              label="Name"
-              placeholder="Your name"
-              required
-              {...form.getInputProps("name")}
-            />
+
             <TextInput
               mb="md"
               label="Email"
@@ -81,19 +81,11 @@ export const Register: FC = () => {
               required
               {...form.getInputProps("email")}
             />
-            <Autocomplete
-              mb="md"
-              label="Nationality"
-              placeholder="Pick value or enter anything"
-              data={["Portugal", "Spain", "Netherlands", "United Kingdom"]}
-              {...form.getInputProps("nationality")}
-            />
-            <Autocomplete
-              mb="md"
-              label="City"
-              placeholder="Pick value or enter anything"
-              data={["Portugal", "Madrid", "Amsterdam", "London"]}
-              {...form.getInputProps("residenceCity")}
+            <TextInput
+              label="Password"
+              placeholder="Your password"
+              required
+              {...form.getInputProps("password")}
             />
             <Button
               radius="xl"
@@ -105,7 +97,7 @@ export const Register: FC = () => {
               Register
             </Button>
             <Text ta="center" mt="md">
-              Don&apos;t have an account?{" "}
+              Already have account?{" "}
               <Anchor
                 c="raceLime"
                 fw={700}
